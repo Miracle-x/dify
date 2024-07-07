@@ -95,7 +95,7 @@ jobs:
 
   create-manifest:
     needs: build
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.platform == 'linux/arm64' && 'arm64_runner' || 'ubuntu-latest' }}
     if: github.repository == 'Miracle-x/dify'
     strategy:
       matrix:
