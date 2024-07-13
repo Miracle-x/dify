@@ -187,6 +187,7 @@ class MessageBasedAppGenerator(BaseAppGenerator):
                 from_source=from_source,
                 from_end_user_id=end_user_id,
                 from_account_id=account_id,
+                tag=application_generate_entity.tag or "chat"
             )
 
             db.session.add(conversation)

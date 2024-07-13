@@ -31,12 +31,12 @@ logger = logging.getLogger(__name__)
 
 class AdvancedChatAppGenerator(MessageBasedAppGenerator):
     def generate(
-        self, app_model: App,
-        workflow: Workflow,
-        user: Union[Account, EndUser],
-        args: dict,
-        invoke_from: InvokeFrom,
-        stream: bool = True,
+            self, app_model: App,
+            workflow: Workflow,
+            user: Union[Account, EndUser],
+            args: dict,
+            invoke_from: InvokeFrom,
+            stream: bool = True,
     ) -> Union[dict, Generator[dict, None, None]]:
         """
         Generate App response.
@@ -64,8 +64,11 @@ class AdvancedChatAppGenerator(MessageBasedAppGenerator):
 
         # get conversation
         conversation = None
+        tag = None
         if args.get('conversation_id'):
             conversation = self._get_conversation_by_user(app_model, args.get('conversation_id'), user)
+        else:
+            tag = args['tag'] or 'chat'
 
         # parse files
         files = args['files'] if args.get('files') else []
@@ -105,7 +108,8 @@ class AdvancedChatAppGenerator(MessageBasedAppGenerator):
             stream=stream,
             invoke_from=invoke_from,
             extras=extras,
-            trace_manager=trace_manager
+            trace_manager=trace_manager,
+            tag=tag
         )
 
         return self._generate(
@@ -117,7 +121,7 @@ class AdvancedChatAppGenerator(MessageBasedAppGenerator):
             conversation=conversation,
             stream=stream
         )
-    
+
     def single_iteration_generate(self, app_model: App,
                                   workflow: Workflow,
                                   node_id: str,
@@ -137,10 +141,10 @@ class AdvancedChatAppGenerator(MessageBasedAppGenerator):
         """
         if not node_id:
             raise ValueError('node_id is required')
-        
+
         if args.get('inputs') is None:
             raise ValueError('inputs is required')
-        
+
         extras = {
             "auto_generate_conversation_name": False
         }
@@ -185,12 +189,12 @@ class AdvancedChatAppGenerator(MessageBasedAppGenerator):
         )
 
     def _generate(self, app_model: App,
-                 workflow: Workflow,
-                 user: Union[Account, EndUser],
-                 invoke_from: InvokeFrom,
-                 application_generate_entity: AdvancedChatAppGenerateEntity,
-                 conversation: Conversation = None,
-                 stream: bool = True) \
+                  workflow: Workflow,
+                  user: Union[Account, EndUser],
+                  invoke_from: InvokeFrom,
+                  application_generate_entity: AdvancedChatAppGenerateEntity,
+                  conversation: Conversation = None,
+                  stream: bool = True) \
             -> Union[dict, Generator[dict, None, None]]:
         is_first_conversation = False
         if not conversation:

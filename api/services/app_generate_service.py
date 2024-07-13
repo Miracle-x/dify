@@ -29,6 +29,7 @@ class AppGenerateService:
         :param streaming: streaming
         :return:
         """
+        print(app_model.mode)
         if app_model.mode == AppMode.COMPLETION.value:
             return CompletionAppGenerator().generate(
                 app_model=app_model,

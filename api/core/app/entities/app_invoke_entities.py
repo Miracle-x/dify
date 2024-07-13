@@ -141,6 +141,7 @@ class AdvancedChatAppGenerateEntity(AppGenerateEntity):
 
     conversation_id: Optional[str] = None
     query: Optional[str] = None
+    tag: Optional[str] = None
 
     class SingleIterationRunEntity(BaseModel):
         """
