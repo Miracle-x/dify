@@ -517,7 +517,7 @@ class Conversation(db.Model):
 
     is_deleted = db.Column(db.Boolean, nullable=False, server_default=db.text('false'))
 
-    tag = db.Column(db.String(255), nullable=False)
+    tag = db.Column(db.String(255), nullable=False, server_default=db.text('false'))
 
     @property
     def model_config(self):

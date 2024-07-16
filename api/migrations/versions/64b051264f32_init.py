@@ -185,6 +185,7 @@ def upgrade():
     sa.Column('read_account_id', postgresql.UUID(), nullable=True),
     sa.Column('created_at', sa.DateTime(), server_default=sa.text('CURRENT_TIMESTAMP(0)'), nullable=False),
     sa.Column('updated_at', sa.DateTime(), server_default=sa.text('CURRENT_TIMESTAMP(0)'), nullable=False),
+    sa.Column('tag', sa.String(length=255), nullable=False, default='chat'),
     sa.PrimaryKeyConstraint('id', name='conversation_pkey')
     )
     with op.batch_alter_table('conversations', schema=None) as batch_op:
