@@ -679,8 +679,12 @@ class OpenAILargeLanguageModel(_CommonOpenAI, LargeLanguageModel):
             delta = chunk.choices[0]
             has_finish_reason = delta.finish_reason is not None
 
-            if not has_finish_reason and (delta.delta.content is None or delta.delta.content == '') and \
-                delta.delta.function_call is None:
+            # Handling exceptions when content filters' streaming mode is set to asynchronous modified filter
+            if delta.delta is None or (
+                    delta.finish_reason is None
+                    and (delta.delta.content is None or delta.delta.content == '')
+                    and delta.delta.function_call is None
+            ):
                 continue
 
             # assistant_message_tool_calls = delta.delta.tool_calls
