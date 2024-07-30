@@ -21,7 +21,7 @@ env:
 
 jobs:
   build:
-    runs-on: ${{ matrix.platform == 'linux/arm64' && 'arm64_runner' || 'ubuntu-latest' }}
+    runs-on: ubuntu-latest
     if: github.repository == 'Miracle-x/dify'
     strategy:
       matrix:
@@ -30,10 +30,10 @@ jobs:
             image_name_env: "DIFY_API_IMAGE_NAME"
             context: "api"
             platform: linux/amd64
-          - service_name: "build-api-arm64"
-            image_name_env: "DIFY_API_IMAGE_NAME"
-            context: "api"
-            platform: linux/arm64
+          # - service_name: "build-api-arm64"
+          #   image_name_env: "DIFY_API_IMAGE_NAME"
+          #   context: "api"
+          #   platform: linux/arm64
           # - service_name: "build-web-amd64"
           #   image_name_env: "DIFY_WEB_IMAGE_NAME"
           #   context: "web"
@@ -96,7 +96,7 @@ jobs:
   create-manifest:
     needs: build
     runs-on: ubuntu-latest
-    if: github.repository == 'langgenius/dify'
+    if: github.repository == 'Miracle-x/dify'
     strategy:
       matrix:
         include:
