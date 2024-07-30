@@ -181,7 +181,7 @@ services:
   # worker service
   # The Celery worker for processing the queue.
   worker:
-    image: langgenius/dify-api:0.6.12-fix1
+    image: bhys9949x/agrox-llm-backend:main
     restart: always
     environment:
       # Use the shared environment variables.
