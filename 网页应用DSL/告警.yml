@@ -1,0 +1,464 @@
+app:
+  description: ''
+  icon: 🤖
+  icon_background: '#FFEAD5'
+  mode: workflow
+  name: 告警
+  use_icon_as_answer_icon: false
+kind: app
+version: 0.1.1
+workflow:
+  conversation_variables: []
+  environment_variables: []
+  features:
+    file_upload:
+      image:
+        enabled: false
+        number_limits: 3
+        transfer_methods:
+        - local_file
+        - remote_url
+    opening_statement: ''
+    retriever_resource:
+      enabled: false
+    sensitive_word_avoidance:
+      enabled: false
+    speech_to_text:
+      enabled: false
+    suggested_questions: []
+    suggested_questions_after_answer:
+      enabled: false
+    text_to_speech:
+      enabled: false
+      language: ''
+      voice: ''
+  graph:
+    edges:
+    - data:
+        isInIteration: false
+        sourceType: start
+        targetType: template-transform
+      id: 1720708196729-source-1721231004955-target
+      selected: false
+      source: '1720708196729'
+      sourceHandle: source
+      target: '1721231004955'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: template-transform
+        targetType: llm
+      id: 1721231004955-source-1721656895073-target
+      source: '1721231004955'
+      sourceHandle: source
+      target: '1721656895073'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: llm
+        targetType: template-transform
+      id: 1721656895073-source-1721275010214-target
+      source: '1721656895073'
+      sourceHandle: source
+      target: '1721275010214'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: template-transform
+        targetType: llm
+      id: 1721275010214-source-1721047696945-target
+      source: '1721275010214'
+      sourceHandle: source
+      target: '1721047696945'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: llm
+        targetType: code
+      id: 1721047696945-source-1721659385758-target
+      source: '1721047696945'
+      sourceHandle: source
+      target: '1721659385758'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: code
+        targetType: http-request
+      id: 1721659385758-source-1721232197774-target
+      source: '1721659385758'
+      sourceHandle: source
+      target: '1721232197774'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: http-request
+        targetType: code
+      id: 1721232197774-source-17217051422320-target
+      source: '1721232197774'
+      sourceHandle: source
+      target: '17217051422320'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        sourceType: code
+        targetType: end
+      id: 17217051422320-source-1721232211869-target
+      source: '17217051422320'
+      sourceHandle: source
+      target: '1721232211869'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    nodes:
+    - data:
+        desc: ''
+        selected: false
+        title: 开始
+        type: start
+        variables:
+        - label: 农作物名称
+          max_length: 48
+          options: []
+          required: true
+          type: text-input
+          variable: plant_name
+        - label: 设备数据
+          max_length: 33024
+          options: []
+          required: true
+          type: paragraph
+          variable: decives_data
+        - label: 农作物生长时期（发芽等）
+          max_length: 48
+          options: []
+          required: true
+          type: text-input
+          variable: plant_period
+      height: 142
+      id: '1720708196729'
+      position:
+        x: 1647.5697720131282
+        y: -142.75364472225868
+      positionAbsolute:
+        x: 1647.5697720131282
+        y: -142.75364472225868
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        context:
+          enabled: false
+          variable_selector: []
+        desc: "请分析{{#1720708196729.plant_name#}}的种植条件是否合适以及如何调整。条件如下：\n\n收到的设备数据为：\n\
+          {{#1720708196729.decives_data#}}\n\n适宜{{#1720708196729.plant_name#}}的生长条件是：\n\
+          {{#1721656895073.text#}}\n\n你可以进行的指令操作如下：\n{{#1721275010214.output#}}\n\n\
+          请根据上述情况进行逐步综合分析（需要分析...），决定是否需要采取措施干预它的生长环境，说明原因。按照以下JSON格式回答。不要回答除JSON以外的任何东西。\n\
+          {\n  //对已知信息的综合说明，要求真实可靠\n  known_info: string,\n  //是否需要干预\n  need_action:\
+          \ True or False,\n  //如果不需要干预，则action里的值都设为空字符串\n  action:{\n    //异常情况描述\n\
+          \    abnormal_desc: string,\n    //具体应对措施\n    value: string,\n    //解释\n\
+          \    reason: string\n  },\n  //总结信息（包括设备数据、作物适宜条件、措施、结果预测等），要求语言精简，信息完整。\n\
+          \  analyse: string,  \n}"
+        model:
+          completion_params:
+            temperature: 0
+          mode: chat
+          name: gpt-4o
+          provider: openai
+        prompt_template:
+        - edition_type: basic
+          id: 28c6b80a-2758-4a61-b908-f3869e8fcaff
+          role: system
+          text: 您是一位具有丰富农业知识和实践经验的农业专家。
+        - id: 835cbe88-849f-4444-af07-af4ecdfcbd9b
+          role: user
+          text: "请分析{{#1720708196729.plant_name#}}的种植条件是否合适以及如何调整。条件如下：\n\n收到的设备数据为：\n\
+            {{#1720708196729.decives_data#}}\n\n适宜{{#1720708196729.plant_name#}}的生长条件是：\n\
+            {{#1721656895073.text#}}\n\n你可以进行的指令操作如下：\n{{#1721275010214.output#}}\n\
+            \n请根据上述情况进行逐步综合分析（需要分析...），决定是否需要采取措施干预它的生长环境，说明原因。按照以下JSON格式回答。不要回答除JSON以外的任何东西。\n\
+            {\n  //对已知信息的综合说明，要求真实可靠\n  known_info: string,\n  //是否需要干预\n  need_action:\
+            \ True or False,\n  //如果不需要干预，则action里的值都设为空字符串\n  action:{\n    //异常情况描述\n\
+            \    abnormal_desc: string,\n    //具体应对措施\n    value: string,\n    //解释\n\
+            \    reason: string\n  },\n  //总结信息（包括设备数据、作物适宜条件、措施、结果预测等），要求语言精简，信息完整。\n\
+            \  analyse: string,  \n}"
+        selected: false
+        title: 分析数值、采取措施（中文）
+        type: llm
+        variables: []
+        vision:
+          configs:
+            detail: high
+          enabled: false
+      height: 782
+      id: '1721047696945'
+      position:
+        x: 2266.892190129982
+        y: -142.75364472225868
+      positionAbsolute:
+        x: 2266.892190129982
+        y: -142.75364472225868
+      selected: true
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        desc: ''
+        selected: false
+        template: 适宜{{ plant_period }}期{{ plant_name }}生长的温度、空气湿度、土壤PH值、土壤电导率、氮钾磷含量的范围分别是多少
+        title: 查询适宜条件
+        type: template-transform
+        variables:
+        - value_selector:
+          - '1720708196729'
+          - plant_name
+          variable: plant_name
+        - value_selector:
+          - '1720708196729'
+          - plant_period
+          variable: plant_period
+      height: 54
+      id: '1721231004955'
+      position:
+        x: 1647.5697720131282
+        y: 121.94656623087278
+      positionAbsolute:
+        x: 1647.5697720131282
+        y: 121.94656623087278
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        authorization:
+          config:
+            api_key: jTWquHn4r7pEOrTKCyzjBhYZ
+            type: bearer
+          type: no-auth
+        body:
+          data: "{\n\t\"query\": \"请牢记以下内容：\\n{{#1721659385758.analyse#}}\",\n\t\"\
+            inputs\": {\n\t\t\"rag_mode\": \"mix\"\n\t},\n\t\"user\": \"warn_api\"\
+            ,\n\t\"conversation_id\": \"\",\n\t\"tag\": \"warning\",\n\t\"response_mode\"\
+            : \"blocking\"\n}"
+          type: json
+        desc: ''
+        headers: 'Content-Type:application/json
+
+          Authorization:Bearer app-KfYfnZTQKJZIhFtaZn53L907'
+        method: post
+        params: ''
+        selected: false
+        timeout:
+          max_connect_timeout: 0
+          max_read_timeout: 0
+          max_write_timeout: 0
+        title: 开启告警会话
+        type: http-request
+        url: http://agrox.horai.cn:19080/v1/chat-messages
+        variables: []
+      height: 106
+      id: '1721232197774'
+      position:
+        x: 2652.59989980016
+        y: 3.113818080229109
+      positionAbsolute:
+        x: 2652.59989980016
+        y: 3.113818080229109
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        desc: ''
+        outputs:
+        - value_selector:
+          - '1721659385758'
+          - analyse
+          variable: analyse
+        - value_selector:
+          - '1721659385758'
+          - normal
+          variable: normal
+        - value_selector:
+          - '1721659385758'
+          - action
+          variable: action
+        - value_selector:
+          - '17217051422320'
+          - conversation
+          variable: body
+        - value_selector:
+          - '1721659385758'
+          - known_info
+          variable: known_info
+        selected: false
+        title: 结束
+        type: end
+      height: 194
+      id: '1721232211869'
+      position:
+        x: 2652.59989980016
+        y: 278.87208992708474
+      positionAbsolute:
+        x: 2652.59989980016
+        y: 278.87208992708474
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        desc: ''
+        selected: false
+        template: "指令格式\r\n灌溉：{灌溉时长}，打药：{农药种类} - {浓度}，施肥：{肥料种类} - {用量}\r\n\r\n示例\r\
+          \n灌溉：30分钟，打药：杀虫剂A - 2%，施肥：复合肥 - 50公斤"
+        title: 指令库
+        type: template-transform
+        variables: []
+      height: 54
+      id: '1721275010214'
+      position:
+        x: 2266.892190129982
+        y: -237.66275274468452
+      positionAbsolute:
+        x: 2266.892190129982
+        y: -237.66275274468452
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        context:
+          enabled: false
+          variable_selector: []
+        desc: ''
+        model:
+          completion_params:
+            temperature: 0
+          mode: chat
+          name: gpt-4o
+          provider: openai
+        prompt_template:
+        - id: 03aa504e-1613-4b2d-9041-dd894f2fb1f8
+          role: system
+          text: 你是一个农业专家，准确简介的回答问题。
+        - id: 1bca8b22-eadf-47a7-b11f-1cfc0977993d
+          role: user
+          text: '{{#1721231004955.output#}}'
+        selected: false
+        title: LLM回答适宜生长条件
+        type: llm
+        variables: []
+        vision:
+          configs:
+            detail: high
+          enabled: false
+      height: 98
+      id: '1721656895073'
+      position:
+        x: 1646.5578520802178
+        y: 187.57871894744812
+      positionAbsolute:
+        x: 1646.5578520802178
+        y: 187.57871894744812
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        code: "\ndef main(http_response: str) -> str:\n    http_response = http_response.replace('```json','').replace('```','').replace('\\\
+          \\n','').replace('\\\\\"','\"').replace('True','true')\n    import json\n\
+          \    data = json.loads(http_response)\n    return {\n        # 注意在输出变量中声明\n\
+          \        'known_info': data['known_info'],\n        'normal': not data['need_action'],\n\
+          \        'action': data['action'],\n        'analyse': data['analyse'],\n\
+          \    }"
+        code_language: python3
+        desc: ''
+        outputs:
+          action:
+            children: null
+            type: object
+          analyse:
+            children: null
+            type: string
+          known_info:
+            children: null
+            type: string
+          normal:
+            children: null
+            type: number
+        selected: false
+        title: 解析LLM返回的json
+        type: code
+        variables:
+        - value_selector:
+          - '1721047696945'
+          - text
+          variable: http_response
+      height: 54
+      id: '1721659385758'
+      position:
+        x: 2646.892190129982
+        y: -142.75364472225868
+      positionAbsolute:
+        x: 2646.892190129982
+        y: -142.75364472225868
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    - data:
+        code: "\ndef main(http_response: str) -> str:\n    http_response = http_response.replace('```json','').replace('```','').replace('\\\
+          \\n','').replace('\\\\\"','\"')\n    import json\n    data = json.loads(http_response)\n\
+          \    return {\n        # 注意在输出变量中声明\n        'conversation': data\n    }"
+        code_language: python3
+        desc: ''
+        outputs:
+          conversation:
+            children: null
+            type: object
+        selected: false
+        title: 解析HTTP返回的json
+        type: code
+        variables:
+        - value_selector:
+          - '1721232197774'
+          - body
+          variable: http_response
+      height: 54
+      id: '17217051422320'
+      position:
+        x: 2652.59989980016
+        y: 151.15312180352566
+      positionAbsolute:
+        x: 2652.59989980016
+        y: 151.15312180352566
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 244
+    viewport:
+      x: -1787.4295056924007
+      y: 122.7843403866847
+      zoom: 0.8705505632961247
