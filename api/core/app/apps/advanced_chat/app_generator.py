@@ -93,9 +93,11 @@ class AdvancedChatAppGenerator(MessageBasedAppGenerator):
 
         # get conversation
         conversation = None
-        conversation_id = args.get('conversation_id')
-        if conversation_id:
-            conversation = self._get_conversation_by_user(app_model=app_model, conversation_id=conversation_id, user=user)
+        tag = None
+        if args.get('conversation_id'):
+            conversation = self._get_conversation_by_user(app_model, args.get('conversation_id'), user)
+        else:
+            tag = args['tag'] or 'chat'
 
         # parse files
         files = args['files'] if args.get('files') else []
@@ -136,7 +138,8 @@ class AdvancedChatAppGenerator(MessageBasedAppGenerator):
             stream=stream,
             invoke_from=invoke_from,
             extras=extras,
-            trace_manager=trace_manager
+            trace_manager=trace_manager,
+            tag=tag
         )
         contexts.tenant_id.set(application_generate_entity.app_config.tenant_id)
 
