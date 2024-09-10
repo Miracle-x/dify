@@ -136,7 +136,7 @@ class AdvancedChatAppGenerator(MessageBasedAppGenerator):
             invoke_from=invoke_from,
             extras=extras,
             trace_manager=trace_manager,
-            tag=conversation.tag if conversation and conversation.tag else None
+            tag=conversation.tag if conversation and conversation.tag else args['tag']
         )
         contexts.tenant_id.set(application_generate_entity.app_config.tenant_id)
 
@@ -203,7 +203,7 @@ class AdvancedChatAppGenerator(MessageBasedAppGenerator):
                 node_id=node_id,
                 inputs=args['inputs']
             ),
-            tag=conversation.tag if conversation and conversation.tag else None
+            tag=conversation.tag if conversation and conversation.tag else args['tag']
         )
         contexts.tenant_id.set(application_generate_entity.app_config.tenant_id)
 
