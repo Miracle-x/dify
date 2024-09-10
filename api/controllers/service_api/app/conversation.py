@@ -32,6 +32,7 @@ class ConversationApi(Resource):
             default="-updated_at",
             location="args",
         )
+        parser.add_argument("tag", type=str, choices=["chat", "warning", "", None], required=False, default=None, location="args")
         args = parser.parse_args()
 
         try:
@@ -42,6 +43,7 @@ class ConversationApi(Resource):
                 limit=args["limit"],
                 invoke_from=InvokeFrom.SERVICE_API,
                 sort_by=args["sort_by"],
+                tag=args["tag"]
             )
         except services.errors.conversation.LastConversationNotExistsError:
             raise NotFound("Last Conversation Not Exists.")

@@ -25,6 +25,7 @@ class ConversationService:
         include_ids: Optional[list] = None,
         exclude_ids: Optional[list] = None,
         sort_by: str = "-updated_at",
+        tag: Optional[str] = None
     ) -> InfiniteScrollPagination:
         if not user:
             return InfiniteScrollPagination(data=[], limit=limit, has_more=False)
@@ -37,6 +38,9 @@ class ConversationService:
             Conversation.from_account_id == (user.id if isinstance(user, Account) else None),
             or_(Conversation.invoke_from.is_(None), Conversation.invoke_from == invoke_from.value),
         )
+
+        if tag:
+            base_query = base_query.filter(Conversation.tag == tag)
 
         if include_ids is not None:
             base_query = base_query.filter(Conversation.id.in_(include_ids))
